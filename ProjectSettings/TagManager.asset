@@ -4,7 +4,19 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Coin
+  - Grid
+  - Flesh
+  - Brick
+  - Concrete
+  - Dirt
+  - Fabric
+  - Metal
+  - Rock
+  - Tile
+  - Wood
+  - Undefined
+  - Trash
+  - Trashcan
   layers:
   - Default
   - TransparentFX
