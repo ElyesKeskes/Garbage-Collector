@@ -24,6 +24,11 @@ public class Coin : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void AcquireTrashCan()
+    {
+        CoinManager.Instance.OnCoinAcquiredChangeTarget(coinTile);
+    }
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -34,7 +39,17 @@ public class Coin : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            AcquireCoin();
+            if(tag == "Trash")
+            {
+                if (!CoinManager.Instance.currentInTrashCan)
+                {
+                    AcquireCoin();
+                }
+            }
+            else
+            {
+                AcquireTrashCan();
+            }
         }
     }
 }

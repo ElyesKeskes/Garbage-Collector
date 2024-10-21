@@ -86,7 +86,7 @@ public class Character : MonoBehaviour
 
     public void FinalizePosition(Tile tile)
     {
-        transform.position = tile.transform.position;
+        //transform.position = tile.transform.position;
         characterTile = tile;
         Moving = false;
         tile.Occupied = true;
@@ -100,7 +100,7 @@ public class Character : MonoBehaviour
             return;
         }
         transform.position = Vector3.Lerp(origin, destination, duration);
-        transform.rotation = Quaternion.LookRotation(origin.DirectionTo(destination).Flat(), Vector3.up);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(origin.DirectionTo(destination).Flat(), Vector3.up), 0.02f);
     }
 
 }

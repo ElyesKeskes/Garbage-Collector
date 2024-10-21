@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: DefaultMove
   m_EditorClassIdentifier: 
   MaxMove: 8
-  MoveSpeed: 0.35
+  MoveSpeed: 0.75
