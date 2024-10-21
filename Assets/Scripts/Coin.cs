@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
+    public bool isAchieved = false;
     public Tile coinTile;
 
     [SerializeField] LayerMask GroundLayerMask;
@@ -13,15 +15,24 @@ public class Coin : MonoBehaviour
         if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
         {
             coinTile = hit.transform.GetComponent<Tile>();
-            //Debug log to check if the coin is on a tile
         }
     }
 
     public void AcquireCoin()
     {
+        isAchieved = true;
+        StartCoroutine(GetTrash());
+    }
+
+    private IEnumerator GetTrash()
+    {
+        CoinManager.Instance.pickUpTrash = false;
         CoinManager.Instance.coins.Remove(this);
         CoinManager.Instance.OnCoinAcquiredChangeTarget(coinTile);
-        Destroy(gameObject);
+        yield return new WaitUntil(() => CoinManager.Instance.pickUpTrash);
+        transform.parent = CoinManager.Instance.handTransform;
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
     }
 
     public void AcquireTrashCan()
@@ -37,6 +48,11 @@ public class Coin : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (isAchieved)
+        {
+            return;
+        }
+
         if (other.tag == "Player")
         {
             if(tag == "Trash")

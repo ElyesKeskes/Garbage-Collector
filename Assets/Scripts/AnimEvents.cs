@@ -19,4 +19,9 @@ public class AnimEvents : MonoBehaviour
     {
         _coinManager.moveOn = true;
     }
+
+    public void CollectTrash()
+    {
+        _coinManager.pickUpTrash = true;
+    }
 }

@@ -26,6 +26,10 @@ public class CoinManager : Singleton<CoinManager>
 
     public bool moveOn = false;
 
+    public bool pickUpTrash = false;
+
+    public Transform handTransform;
+
     public void SetTarget(Coin coin)
     {
         currentTarget = coin;
