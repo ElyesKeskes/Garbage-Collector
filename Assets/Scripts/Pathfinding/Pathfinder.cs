@@ -77,11 +77,11 @@ public class Pathfinder : MonoBehaviour
     /// <returns></returns>
     private List<Tile> NeighborTiles(Tile origin)
     {
-        const float HEXAGONAL_OFFSET = 1.75f;
+        const float HEXAGONAL_OFFSET = 1.75f / 1.946055345814035f;
         List<Tile> tiles = new List<Tile>();
         Vector3 direction = Vector3.forward * (origin.GetComponent<MeshFilter>().sharedMesh.bounds.extents.x * HEXAGONAL_OFFSET);
-        float rayLength = 4f;
-        float rayHeightOffset = 1f;
+        float rayLength = 4f / 1.946055345814035f;
+        float rayHeightOffset = 1f / 1.946055345814035f;
 
         //Rotate a raycast in 60 degree steps and find all adjacent tiles
         for (int i = 0; i < 6; i++)

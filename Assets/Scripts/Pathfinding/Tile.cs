@@ -45,8 +45,9 @@ public class Tile : MonoBehaviour
     /// <param name="value"></param>
     public void ModifyCost()
     {
-        terrainCost++;
-        if (terrainCost > costMap.Count-1)
+        terrainCost = 1000;
+        SetColor(new Color(1, 0, 0));
+        /*if (terrainCost > costMap.Count-1)
             terrainCost = 0;
 
         if (costMap.TryGetValue(terrainCost, out Color col))
@@ -56,7 +57,24 @@ public class Tile : MonoBehaviour
         else
         {
             Debug.Log("Invalid terraincost or mapping" + terrainCost);
+        }*/
+    }
+
+    public void ModifyCostTrash()
+    {
+        terrainCost = 2;
+        SetColor(new Color(0, 1, 0));
+        /*if (terrainCost > costMap.Count-1)
+            terrainCost = 0;
+
+        if (costMap.TryGetValue(terrainCost, out Color col))
+        {
+            SetColor(col);
         }
+        else
+        {
+            Debug.Log("Invalid terraincost or mapping" + terrainCost);
+        }*/
     }
 
     private void SetColor(Color color)

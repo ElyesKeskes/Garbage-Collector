@@ -25,6 +25,7 @@ public class CoinRandomizer : MonoBehaviour
             if (coinScript != null && coinScript.coinTile != null)
             {
                 occupiedTiles.Add(coinScript.coinTile.transform);
+                coinScript.coinTile.ModifyCost();
             }
         }
 
@@ -61,6 +62,7 @@ public class CoinRandomizer : MonoBehaviour
             Transform selectedTile = tileList[randomIndex];
             Vector3 spawnPosition = selectedTile.position + Vector3.up * 0.35f;
             Instantiate(coinPrefab, spawnPosition, Quaternion.identity);
+            selectedTile.GetComponent<Tile>().ModifyCostTrash();
         }
     }
 }

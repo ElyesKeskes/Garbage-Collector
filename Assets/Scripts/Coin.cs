@@ -33,6 +33,7 @@ public class Coin : MonoBehaviour
         transform.parent = CoinManager.Instance.handTransform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+        //yield return new WaitUntil(() => CoinManager)
     }
 
     public void AcquireTrashCan()
@@ -64,7 +65,10 @@ public class Coin : MonoBehaviour
             }
             else
             {
-                AcquireTrashCan();
+                if (CoinManager.Instance.currentInTrashCan)
+                {
+                    AcquireTrashCan();
+                }
             }
         }
     }

@@ -100,7 +100,7 @@ public class Character : MonoBehaviour
             return;
         }
         transform.position = Vector3.Lerp(origin, destination, duration);
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(origin.DirectionTo(destination).Flat(), Vector3.up), 0.02f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(origin.DirectionTo(destination).Flat(), Vector3.up), 0.02f * 1.946055345814035f);
     }
 
 }
