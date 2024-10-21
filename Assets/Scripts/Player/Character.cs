@@ -8,8 +8,12 @@ public class Character : MonoBehaviour
 
     public CharacterMoveData movedata;
     public Tile characterTile;
+
+    public bool stopMoving = false;
+
+    public Coroutine moveCoroutine;
     [SerializeField]
-    LayerMask GroundLayerMask;
+    public LayerMask GroundLayerMask;
     #endregion
 
     private void Awake()
@@ -20,7 +24,7 @@ public class Character : MonoBehaviour
     /// <summary>
     /// If no starting tile has been manually assigned, we find one beneath us
     /// </summary>
-    void FindTileAtStart()
+    public void FindTileAtStart()
     {
         if (characterTile != null)
         {
@@ -47,7 +51,7 @@ public class Character : MonoBehaviour
         Tile currentTile = path.tiles[0];
         float animationTime = 0f;
 
-        while (currentStep <= pathLength)
+        while (currentStep <= pathLength && !stopMoving)
         {
             yield return null;
 
@@ -67,17 +71,20 @@ public class Character : MonoBehaviour
             animationTime = 0f;
         }
 
-        FinalizePosition(path.tiles[pathLength]);
+        stopMoving = false;
+
+        //FinalizePosition(path.tiles[pathLength]);
     }
     
     public void StartMove(Path _path)
     {
         Moving = true;
         characterTile.Occupied = false;
-        StartCoroutine(MoveAlongPath(_path));
+
+        moveCoroutine = StartCoroutine(MoveAlongPath(_path));
     }
 
-    void FinalizePosition(Tile tile)
+    public void FinalizePosition(Tile tile)
     {
         transform.position = tile.transform.position;
         characterTile = tile;
@@ -88,6 +95,10 @@ public class Character : MonoBehaviour
 
     void MoveAndRotate(Vector3 origin, Vector3 destination, float duration)
     {
+        if (stopMoving && !Moving)
+        {
+            return;
+        }
         transform.position = Vector3.Lerp(origin, destination, duration);
         transform.rotation = Quaternion.LookRotation(origin.DirectionTo(destination).Flat(), Vector3.up);
     }

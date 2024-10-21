@@ -20,7 +20,7 @@ public class Coin : MonoBehaviour
     public void AcquireCoin()
     {
         CoinManager.Instance.coins.Remove(this);
-        CoinManager.Instance.OnCoinAcquiredChangeTarget();
+        CoinManager.Instance.OnCoinAcquiredChangeTarget(coinTile);
         Destroy(gameObject);
     }
 

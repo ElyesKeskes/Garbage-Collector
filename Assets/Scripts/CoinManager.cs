@@ -68,9 +68,17 @@ public class CoinManager : Singleton<CoinManager>
         NavigateToTile();
     }
 
-    public void OnCoinAcquiredChangeTarget()
+    public void OnCoinAcquiredChangeTarget(Tile coinTile)
     {
+        selectedCharacter.stopMoving = true;
         selectedCharacter.Moving = false;
+
+        selectedCharacter.characterTile = coinTile;
+
+        selectedCharacter.transform.position = coinTile.transform.position;
+        selectedCharacter.Moving = false;
+        selectedCharacter.characterTile.Occupied = true;
+        selectedCharacter.characterTile.occupyingCharacter = selectedCharacter;
 
         GetClosestCoin();
         NavigateToTile();
@@ -86,6 +94,7 @@ public class CoinManager : Singleton<CoinManager>
 
         if (RetrievePath(out Path newPath))
         {
+            selectedCharacter.stopMoving = false;
             selectedCharacter.StartMove(newPath);
             //   selectedCharacter = null;
         }
