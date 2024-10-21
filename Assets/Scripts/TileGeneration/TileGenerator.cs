@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TileGenerator : MonoBehaviour
 {
+
+
     void ClearGrid()
     {
         for (int i = transform.childCount; i >= transform.childCount; i--)
@@ -10,9 +12,11 @@ public class TileGenerator : MonoBehaviour
                 break;
 
             int c = Mathf.Clamp(i - 1, 0, transform.childCount);
-            DestroyImmediate(transform.GetChild(c).gameObject);
+            // DestroyImmediate(transform.GetChild(c).gameObject);
+            Destroy(transform.GetChild(c).gameObject);
         }
     }
+
 
     Vector2 DetermineTileSize(Bounds tileBounds)
     {
