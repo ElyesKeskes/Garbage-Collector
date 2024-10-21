@@ -5,7 +5,6 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     public Tile coinTile;
-    public MeshRenderer Crenderer;
 
     [SerializeField] LayerMask GroundLayerMask;
 
@@ -20,14 +19,11 @@ public class Coin : MonoBehaviour
 
     public void AcquireCoin()
     {
-        Crenderer.enabled = false;
-        //Remove this Coin from list coins in CoinManager.Instance.
         CoinManager.Instance.coins.Remove(this);
+        CoinManager.Instance.OnCoinAcquiredChangeTarget();
         Destroy(gameObject);
-        //Find and destroy this reference from coin list in coinManager Instance
     }
 
-    //Draw debug lines to show the raycast
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -39,9 +35,6 @@ public class Coin : MonoBehaviour
         if (other.tag == "Player")
         {
             AcquireCoin();
-            CoinManager.Instance.OnCoinAcquiredChangeTarget();
         }
-
     }
-
 }

@@ -14,7 +14,7 @@ public class CoinManager : Singleton<CoinManager>
     public Pathfinder pathfinder;
     Path Lastpath;
     Tile currentTile;
-    public Action coinAcquired;
+
     public void SetTarget(Coin coin)
     {
         currentTarget = coin;
@@ -35,8 +35,10 @@ public class CoinManager : Singleton<CoinManager>
     {
         float minDistance = Mathf.Infinity;
         Coin closestCoin = null;
+
         foreach (Coin coin in coins)
-        { Debug.Log("Nigger balls2");
+        { 
+            Debug.Log("Get Closest Coin foreach loop for coin == " + coin);
             if (coin)
             {
                 float distance = Vector3.Distance(selectedCharacter.transform.position, coin.transform.position);
@@ -46,24 +48,15 @@ public class CoinManager : Singleton<CoinManager>
                     closestCoin = coin;
                 }
             }
-
-
         }
+
         SetTarget(closestCoin);
     }
 
-    void Awake()
-    {
-        base.Awake();
-        //Subscribe to event
-        coinAcquired += OnCoinAcquiredChangeTarget;
-    }
 
     void Start()
     {
         Invoke("DelayedStart", 3f);
-        coinAcquired += OnCoinAcquiredChangeTarget;
-
     }
 
     void DelayedStart()
@@ -77,7 +70,8 @@ public class CoinManager : Singleton<CoinManager>
 
     public void OnCoinAcquiredChangeTarget()
     {
-        Debug.Log("Nigger balls");
+        selectedCharacter.Moving = false;
+
         GetClosestCoin();
         NavigateToTile();
     }
@@ -85,11 +79,13 @@ public class CoinManager : Singleton<CoinManager>
     private void NavigateToTile()
     {
         if (selectedCharacter == null || selectedCharacter.Moving == true)
+        {
             return;
+        }
+            
 
         if (RetrievePath(out Path newPath))
         {
-
             selectedCharacter.StartMove(newPath);
             //   selectedCharacter = null;
         }

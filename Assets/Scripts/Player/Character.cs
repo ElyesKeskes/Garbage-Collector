@@ -4,7 +4,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     #region member fields
-    public bool Moving { get; private set; } = false;
+    public bool Moving { get; set; } = false;
 
     public CharacterMoveData movedata;
     public Tile characterTile;
