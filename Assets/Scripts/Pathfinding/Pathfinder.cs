@@ -23,7 +23,7 @@ public class Pathfinder : MonoBehaviour
     /// </summary>
     /// <param name="character"></param>
     public Path FindPath(Tile origin, Tile destination)
-    {
+    {Debug.Log(" Destination:" + destination.name);
         List<Tile> openSet = new List<Tile>();
         List<Tile> closedSet = new List<Tile>();
         
@@ -55,7 +55,10 @@ public class Pathfinder : MonoBehaviour
                 if (costToNeighbor < neighbor.costFromOrigin || !openSet.Contains(neighbor))
                 {
                     neighbor.costFromOrigin = costToNeighbor;
+                    Debug.Log("Current Tile: " + currentTile.name + " Neighbor: " + neighbor.name + " Position: " + neighbor.transform.position + " Destination:" + destination.name);
                     neighbor.costToDestination = Vector3.Distance(destination.transform.position, neighbor.transform.position);
+                    //Debug log current tile name and neighbor name and position
+                    
                     neighbor.parent = currentTile;
 
                     if (!openSet.Contains(neighbor))
@@ -113,7 +116,7 @@ public class Pathfinder : MonoBehaviour
     public Path PathBetween(Tile dest, Tile source)
     {
         Path path = MakePath(dest, source);
-        illustrator.IllustratePath(path);
+        // illustrator.IllustratePath(path);
         return path;
     }
 

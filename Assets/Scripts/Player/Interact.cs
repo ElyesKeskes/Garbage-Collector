@@ -24,7 +24,6 @@ public class Interact : MonoBehaviour
     private void Start()
     {
         mainCam = FindFirstObjectByType<Camera>();
-        selectedCharacter = GetComponent<Character>();
         if (pathfinder == null)
             pathfinder = GameObject.Find("Pathfinder").GetComponent<Pathfinder>();
     }
@@ -32,7 +31,7 @@ public class Interact : MonoBehaviour
     private void Update()
     {
         Clear();
-        MouseUpdate();
+        // MouseUpdate();
     }
 
     private void MouseUpdate()
