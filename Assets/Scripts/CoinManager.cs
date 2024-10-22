@@ -30,6 +30,39 @@ public class CoinManager : Singleton<CoinManager>
 
     public Transform handTransform;
 
+    public Transform trashBagTransform;
+
+
+    public void RotateTowards(Transform target)
+    {
+        StartCoroutine(RotateSmoothly(target, 0.5f));
+    }
+
+    private IEnumerator RotateSmoothly(Transform target, float duration)
+    {
+        Transform child = transform.GetChild(0);
+
+        Quaternion startRotation = child.rotation;
+
+        Vector3 directionToTarget = (target.position - child.position).normalized;
+
+        Quaternion endRotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
+
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            child.rotation = Quaternion.Slerp(startRotation, endRotation, timeElapsed / duration);
+
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        child.rotation = endRotation;
+    }
+
+
     public void SetTarget(Coin coin)
     {
         currentTarget = coin;

@@ -45,7 +45,7 @@ public class Tile : MonoBehaviour
     /// <param name="value"></param>
     public void ModifyCost()
     {
-        terrainCost = 1000;
+        terrainCost = 2;
         SetColor(new Color(1, 0, 0));
         /*if (terrainCost > costMap.Count-1)
             terrainCost = 0;
@@ -62,7 +62,7 @@ public class Tile : MonoBehaviour
 
     public void ModifyCostTrash()
     {
-        terrainCost = 2;
+        terrainCost = 1;
         SetColor(new Color(0, 1, 0));
         /*if (terrainCost > costMap.Count-1)
             terrainCost = 0;

@@ -26,19 +26,70 @@ public class Coin : MonoBehaviour
 
     private IEnumerator GetTrash()
     {
+        CoinManager.Instance.RotateTowards(transform.GetChild(0));
         CoinManager.Instance.pickUpTrash = false;
         CoinManager.Instance.coins.Remove(this);
         CoinManager.Instance.OnCoinAcquiredChangeTarget(coinTile);
         yield return new WaitUntil(() => CoinManager.Instance.pickUpTrash);
+
+        CoinManager.Instance.pickUpTrash = false;
+        Rigidbody rb = transform.GetChild(0).GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.isKinematic = true;
+        transform.GetChild(0).transform.localPosition = Vector3.zero;
+        transform.GetChild(0).transform.localRotation = Quaternion.identity;
         transform.parent = CoinManager.Instance.handTransform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-        //yield return new WaitUntil(() => CoinManager)
+        yield return new WaitUntil(() => CoinManager.Instance.pickUpTrash);
+
+        CoinManager.Instance.pickUpTrash = false;
+        transform.parent = CoinManager.Instance.trashBagTransform;
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
+
+    private IEnumerator LerpTrashToTrashCan(Transform trash, float duration)
+    {
+       
+
+        Vector3 startPosition = trash.position;
+
+        Vector3 targetPosition = transform.position;
+
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            trash.position = Vector3.Lerp(startPosition, targetPosition, timeElapsed / duration);
+
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        trash.position = targetPosition;
+
+        trash.parent = transform;
+    }
+
+
+    private IEnumerator TrashCanCoroutine()
+    {
+        CoinManager.Instance.RotateTowards(transform);
+        CoinManager.Instance.OnCoinAcquiredChangeTarget(coinTile);
+        yield return new WaitUntil(() => CoinManager.Instance.pickUpTrash);
+        CoinManager.Instance.pickUpTrash = false;
+
+        foreach (Transform child in CoinManager.Instance.trashBagTransform)
+        {
+            StartCoroutine(LerpTrashToTrashCan(child, 0.6f));
+        }
     }
 
     public void AcquireTrashCan()
     {
-        CoinManager.Instance.OnCoinAcquiredChangeTarget(coinTile);
+        StartCoroutine(TrashCanCoroutine());
     }
 
     void OnDrawGizmos()
