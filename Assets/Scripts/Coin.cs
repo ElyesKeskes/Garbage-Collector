@@ -21,6 +21,7 @@ public class Coin : MonoBehaviour
     public void AcquireCoin()
     {
         isAchieved = true;
+        Destroy(transform.GetChild(1).gameObject);
         StartCoroutine(GetTrash());
     }
 

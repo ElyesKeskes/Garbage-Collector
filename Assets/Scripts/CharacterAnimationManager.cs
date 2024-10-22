@@ -17,8 +17,24 @@ public class CharacterAnimationManager : MonoBehaviour
     private float gravity = -9.81f;
     private float fallSpeed;
 
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Time.timeScale = 4f;
+        }
+
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            Time.timeScale = 1f;
+        } 
+
         moveX = 0f;
         moveZ = 0f;
         UpdateAnimatorParameters();

@@ -8,29 +8,29 @@ public class TrashMeshRandomizer : MonoBehaviour
     {
         int childCount = this.transform.childCount;
 
-        if (childCount == 0)
+        if (childCount <= 1)
         {
-            Debug.LogWarning("No children found on this GameObject.");
+            Debug.LogWarning("Not enough children to randomize.");
             return;
         }
 
-        // Select a random child to keep and enable
-        int randomIndex = Random.Range(0, childCount);
+        int randomIndex = Random.Range(0, childCount - 1);
 
-        for (int i = 0; i < childCount; i++)
+        for (int i = 0; i < childCount - 1; i++)
         {
             Transform child = this.transform.GetChild(i);
 
             if (i == randomIndex)
             {
-                // Enable the randomly selected child
                 child.gameObject.SetActive(true);
             }
             else
             {
-                // Destroy the unselected children
                 Destroy(child.gameObject);
             }
         }
+
+        Transform lastChild = this.transform.GetChild(childCount - 1);
+        lastChild.gameObject.SetActive(true);
     }
 }
