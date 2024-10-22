@@ -83,7 +83,15 @@ public class Coin : MonoBehaviour
 
         foreach (Transform child in CoinManager.Instance.trashBagTransform)
         {
+            CoinManager.Instance.currentValue++;
+            CoinManager.Instance.currentTXT.text = CoinManager.Instance.currentValue.ToString();
             StartCoroutine(LerpTrashToTrashCan(child, 0.6f));
+        }
+        
+        if(CoinManager.Instance.currentValue >= CoinManager.Instance.coinRandomizer.nbCoins)
+        {
+            CoinManager.Instance.winImg.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
 

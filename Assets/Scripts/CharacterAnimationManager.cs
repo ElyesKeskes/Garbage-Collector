@@ -63,8 +63,8 @@ public class CharacterAnimationManager : MonoBehaviour
     void UpdateAnimatorParameters()
     {
         bool isIdle = Mathf.Approximately(moveX, 0f) && Mathf.Approximately(moveZ, 0f);
-        animator.SetBool("isIdle", isIdle);
-        animator.SetBool("isWalkingForward", !isIdle);
+        //animator.SetBool("isIdle", isIdle);
+        //animator.SetBool("isWalkingForward", !isIdle);
         animator.SetFloat("WalkSpeed", moveSpeed);
     }
 }

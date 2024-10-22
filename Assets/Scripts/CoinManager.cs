@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class CoinManager : Singleton<CoinManager>
@@ -32,6 +33,12 @@ public class CoinManager : Singleton<CoinManager>
 
     public Transform trashBagTransform;
 
+    public CoinRandomizer coinRandomizer;
+    public TextMeshProUGUI currentTXT;
+    public TextMeshProUGUI totalTXT;
+    public int currentValue = 0;
+
+    public GameObject winImg;
 
     public void RotateTowards(Transform target)
     {
@@ -121,6 +128,7 @@ public class CoinManager : Singleton<CoinManager>
     void Start()
     {
         Invoke("DelayedStart", 3f);
+        totalTXT.text = coinRandomizer.nbCoins.ToString();
     }
 
     void DelayedStart()
@@ -129,6 +137,7 @@ public class CoinManager : Singleton<CoinManager>
             pathfinder = GameObject.Find("Pathfinder").GetComponent<Pathfinder>();
         GetAllCoinsByTag();
         GetClosestTrash();
+        _animator.SetTrigger("Walk");
         NavigateToTile();
     }
 
