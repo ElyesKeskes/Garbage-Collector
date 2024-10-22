@@ -91,6 +91,7 @@ public class Coin : MonoBehaviour
         if(CoinManager.Instance.currentValue >= CoinManager.Instance.coinRandomizer.nbCoins)
         {
             CoinManager.Instance.winImg.SetActive(true);
+            yield return new WaitForSeconds(1.25f);
             Time.timeScale = 0f;
         }
     }
