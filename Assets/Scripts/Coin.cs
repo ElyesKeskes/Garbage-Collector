@@ -13,7 +13,7 @@ public class Coin : MonoBehaviour
 
     public void ReStart()
     {
-        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
+        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 150f, GroundLayerMask))
         {
             coinTile = hit.transform.GetComponent<Tile>();
         }
@@ -21,7 +21,7 @@ public class Coin : MonoBehaviour
 
     public void Start()
     {
-        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
+        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 150f, GroundLayerMask))
         {
             coinTile = hit.transform.GetComponent<Tile>();
         }

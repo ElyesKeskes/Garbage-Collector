@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class Character : MonoBehaviour
 {
@@ -59,6 +60,7 @@ public class Character : MonoBehaviour
             Vector3 nextTilePosition = path.tiles[currentStep].transform.position;
 
             float movementTime = animationTime / (movedata.MoveSpeed + path.tiles[currentStep].terrainCost * TERRAIN_PENALTY);
+            
             MoveAndRotate(currentTile.transform.position, nextTilePosition, movementTime);
             animationTime += Time.deltaTime;
 
@@ -99,6 +101,9 @@ public class Character : MonoBehaviour
         {
             return;
         }
+
+        Debug.Log("CURRENT TILE TO REALLY MOVE TO : " + origin);
+
         transform.position = Vector3.Lerp(origin, destination, duration);
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(origin.DirectionTo(destination).Flat(), Vector3.up), 0.02f * 1.946055345814035f * 2f);
     }

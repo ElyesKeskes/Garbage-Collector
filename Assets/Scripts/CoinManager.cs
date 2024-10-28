@@ -45,6 +45,10 @@ public class CoinManager : Singleton<CoinManager>
 
     public LayerMask GroundLayerMask;
 
+    public Transform raycastOrigin;
+
+    public Path oldPath;
+
     public void RotateTowards(Transform target)
     {
         StartCoroutine(RotateSmoothly(target, 0.5f));
@@ -132,14 +136,25 @@ public class CoinManager : Singleton<CoinManager>
     public void GetHitByDog()
     {
         gotUp = false;
+        selectedCharacter.Moving = false;
         selectedCharacter.stopMoving = true;
-        _animator.SetTrigger("GetHit");
+        /*selectedCharacter.stopMoving = true;
+        selectedCharacter.Moving = false;
+        selectedCharacter.characterTile.Occupied = true;
+        selectedCharacter.characterTile.occupyingCharacter = selectedCharacter;
+        if (Physics.Raycast(raycastOrigin.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
+        {
+            Debug.Log("Found a tile below me");
+            selectedCharacter.characterTile = hit.transform.GetComponent<Tile>();
+            Debug.Log("selectedCharacter.characterTile : " + selectedCharacter.characterTile);
+        }*/
+        _animator.SetTrigger("GetHit"); 
         StartCoroutine(AwaitGetUp());
     }
 
     private IEnumerator AwaitGetUp()
     {
-        List<Transform> trashChildList = new List<Transform>();
+        /*List<Transform> trashChildList = new List<Transform>();
         foreach (Transform trashChild in trashBagTransform)
         {
             trashChildList.Add(trashChild);
@@ -158,33 +173,26 @@ public class CoinManager : Singleton<CoinManager>
 
             StartCoroutine(TrashReset(trashChild));
         }
-
+        */
         yield return new WaitUntil(() => gotUp);
 
         Debug.Log("I just got up");
 
         Debug.Log("Let's raycast down");
-        if (Physics.Raycast(selectedCharacter.transform.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
-        {
-            Debug.Log("Found a tile below me");
-            selectedCharacter.characterTile = hit.transform.GetComponent<Tile>();
-            Debug.Log("selectedCharacter.characterTile : " + selectedCharacter.characterTile);
-        }
 
-        moveOn = true;
-        selectedCharacter.stopMoving = true;
-        selectedCharacter.Moving = false;
-        selectedCharacter.characterTile.Occupied = true;
-        selectedCharacter.characterTile.occupyingCharacter = selectedCharacter;
+        selectedCharacter.Moving = true;
+        selectedCharacter.stopMoving = false;
 
-        StartCoroutine(SelectNextTarget());
+        selectedCharacter.StartMove(oldPath);
+        //StartCoroutine(SelectNextTarget());
     }
 
     private IEnumerator TrashReset(Transform trashChild)
     {
         Coin _coin = trashChild.GetComponent<Coin>();
         coins.Add(_coin);
-        yield return new WaitForSeconds(3f);
+        _coin.ReStart();
+        yield return new WaitForSeconds(6f);
         Rigidbody rb = trashChild.GetComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeAll;
         rb.useGravity = false;
@@ -270,6 +278,7 @@ public class CoinManager : Singleton<CoinManager>
 
         if (RetrievePath(out Path newPath))
         {
+            oldPath = newPath;
             selectedCharacter.stopMoving = false;
             selectedCharacter.StartMove(newPath);
             //   selectedCharacter = null;
