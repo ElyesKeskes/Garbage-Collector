@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8113008526084282492}
   - component: {fileID: 3261247446506801538}
   - component: {fileID: 1775824999821498672}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Can_02_GEO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 8003140109341989206}
   - component: {fileID: 6721461714500359138}
   - component: {fileID: 8052499944686008600}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BeerCan01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 7897238612606536923}
   - component: {fileID: 8419943103627155279}
   - component: {fileID: 1910510978035842006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 2381522661761143386}
   - component: {fileID: 1610828117291386805}
   - component: {fileID: 6093725931383143938}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Can_01_GEO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -726,7 +726,7 @@ GameObject:
   - component: {fileID: 481950085972349006}
   - component: {fileID: 7974179994240556571}
   - component: {fileID: 3441833554455784759}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plastic_Bottle_02_GEO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 5500822813100833140}
   - component: {fileID: 2506794548619768667}
   - component: {fileID: 1413089211991259250}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -994,7 +994,7 @@ GameObject:
   - component: {fileID: 2240760453827053154}
   - component: {fileID: 2362706163088357757}
   - component: {fileID: 8396620295408486007}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plastic_Bottle_03_GEO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1128,7 +1128,7 @@ GameObject:
   - component: {fileID: 6452600574954749693}
   - component: {fileID: 5217528619080342893}
   - component: {fileID: 6822929750379363874}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plastic_Bottle_01_GEO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1262,7 +1262,7 @@ GameObject:
   - component: {fileID: 3293244780403536038}
   - component: {fileID: 2707286818891436503}
   - component: {fileID: 3085672303024405159}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ShapeRandomized
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1396,7 +1396,7 @@ GameObject:
   - component: {fileID: 8555461961765747399}
   - component: {fileID: 6702283428116050195}
   - component: {fileID: 3917960088441666429}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PaperBag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1530,6 +1530,7 @@ GameObject:
   - component: {fileID: 3179008324760343661}
   - component: {fileID: 5300847277327268269}
   - component: {fileID: 5344904868291886770}
+  - component: {fileID: 3104567829711466026}
   m_Layer: 0
   m_Name: Trash
   m_TagString: Trash
@@ -1612,7 +1613,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8894373584281078383}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 3.5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1643,6 +1644,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929d743de89759c4a9a6a1f939848354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &3104567829711466026
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8894373584281078383}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 126
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.25
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9176772956185083349
 GameObject:
   m_ObjectHideFlags: 0
@@ -1656,7 +1678,7 @@ GameObject:
   - component: {fileID: 1840369638240756009}
   - component: {fileID: 6149660070146764464}
   - component: {fileID: 7442787320088033511}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Can_03_GEO
   m_TagString: Untagged
   m_Icon: {fileID: 0}

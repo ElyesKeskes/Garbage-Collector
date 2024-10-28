@@ -10,7 +10,16 @@ public class Coin : MonoBehaviour
 
     [SerializeField] LayerMask GroundLayerMask;
 
-    void Start()
+
+    public void ReStart()
+    {
+        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
+        {
+            coinTile = hit.transform.GetComponent<Tile>();
+        }
+    }
+
+    public void Start()
     {
         if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
         {

@@ -24,4 +24,9 @@ public class AnimEvents : MonoBehaviour
     {
         _coinManager.pickUpTrash = true;
     }
+
+    public void GetUp()
+    {
+        _coinManager.gotUp = true;
+    }
 }

@@ -17,6 +17,7 @@ TagManager:
   - Undefined
   - Trash
   - Trashcan
+  - Bite
   layers:
   - Default
   - TransparentFX
@@ -25,9 +26,9 @@ TagManager:
   - Water
   - UI
   - NoRender
-  - 
-  - 
-  - 
+  - TrashBlocker
+  - Trash
+  - Grid
   - 
   - 
   - 
