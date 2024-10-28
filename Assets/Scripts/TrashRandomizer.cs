@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinRandomizer : MonoBehaviour
+public class TrashRandomizer : MonoBehaviour
 {
     public Transform gridParent;
     public List<Transform> tileList = new List<Transform>();
-    public GameObject coinPrefab;
-    public int nbCoins = 10;
+    public GameObject trashPrefab;
+    public int NumberofTrashToSpawn = 10;
     public Transform trashCanParent;
 
     private List<Transform> occupiedTiles = new List<Transform>();
@@ -21,11 +21,11 @@ public class CoinRandomizer : MonoBehaviour
     {
         foreach (Transform trashCan in trashCanParent)
         {
-            Coin coinScript = trashCan.GetComponent<Coin>();
-            if (coinScript != null && coinScript.coinTile != null)
+            Trash coinScript = trashCan.GetComponent<Trash>();
+            if (coinScript != null && coinScript.trashTile != null)
             {
-                occupiedTiles.Add(coinScript.coinTile.transform);
-                coinScript.coinTile.ModifyCost();
+                occupiedTiles.Add(coinScript.trashTile.transform);
+                coinScript.trashTile.ModifyCost();
             }
         }
 
@@ -45,7 +45,7 @@ public class CoinRandomizer : MonoBehaviour
 
     void SpawnCoins()
     {
-        int coinsToSpawn = Mathf.Min(nbCoins, tileList.Count);
+        int coinsToSpawn = Mathf.Min(NumberofTrashToSpawn, tileList.Count);
         List<int> usedIndexes = new List<int>();
 
         for (int i = 0; i < coinsToSpawn; i++)
@@ -61,7 +61,7 @@ public class CoinRandomizer : MonoBehaviour
 
             Transform selectedTile = tileList[randomIndex];
             Vector3 spawnPosition = selectedTile.position + Vector3.up * 0.35f;
-            Instantiate(coinPrefab, spawnPosition, Quaternion.identity);
+            Instantiate(trashPrefab, spawnPosition, Quaternion.identity);
             selectedTile.GetComponent<Tile>().ModifyCostTrash();
         }
     }

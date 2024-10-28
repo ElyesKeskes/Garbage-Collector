@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Trash : MonoBehaviour
 {
-    public bool isAchieved = false;
-    public Tile coinTile;
+    public bool hasBeenPickedUp = false;
+    public Tile trashTile;
 
     [SerializeField] LayerMask GroundLayerMask;
 
@@ -15,7 +15,7 @@ public class Coin : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 150f, GroundLayerMask))
         {
-            coinTile = hit.transform.GetComponent<Tile>();
+            trashTile = hit.transform.GetComponent<Tile>();
         }
     }
 
@@ -23,38 +23,38 @@ public class Coin : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 150f, GroundLayerMask))
         {
-            coinTile = hit.transform.GetComponent<Tile>();
+            trashTile = hit.transform.GetComponent<Tile>();
         }
     }
 
-    public void AcquireCoin()
+    public void OnTrashPickup()
     {
-        isAchieved = true;
+        hasBeenPickedUp = true;
         Destroy(transform.GetChild(1).gameObject);
         StartCoroutine(GetTrash());
     }
 
     private IEnumerator GetTrash()
     {
-        CoinManager.Instance.RotateTowards(transform.GetChild(0));
-        CoinManager.Instance.pickUpTrash = false;
-        CoinManager.Instance.coins.Remove(this);
-        CoinManager.Instance.OnCoinAcquiredChangeTarget(coinTile);
-        yield return new WaitUntil(() => CoinManager.Instance.pickUpTrash);
+        AgentManager.Instance.RotateTowards(transform.GetChild(0));
+        AgentManager.Instance.pickUpTrash = false;
+        AgentManager.Instance.trashPieces.Remove(this);
+        AgentManager.Instance.OnTrashPickedUpChangeTarget(trashTile);
+        yield return new WaitUntil(() => AgentManager.Instance.pickUpTrash);
 
-        CoinManager.Instance.pickUpTrash = false;
+        AgentManager.Instance.pickUpTrash = false;
         Rigidbody rb = transform.GetChild(0).GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.isKinematic = true;
         transform.GetChild(0).transform.localPosition = Vector3.zero;
         transform.GetChild(0).transform.localRotation = Quaternion.identity;
-        transform.parent = CoinManager.Instance.handTransform;
+        transform.parent = AgentManager.Instance.handTransform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-        yield return new WaitUntil(() => CoinManager.Instance.pickUpTrash);
+        yield return new WaitUntil(() => AgentManager.Instance.pickUpTrash);
 
-        CoinManager.Instance.pickUpTrash = false;
-        transform.parent = CoinManager.Instance.trashBagTransform;
+        AgentManager.Instance.pickUpTrash = false;
+        transform.parent = AgentManager.Instance.trashBagTransform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     }
@@ -86,27 +86,27 @@ public class Coin : MonoBehaviour
 
     private IEnumerator TrashCanCoroutine()
     {
-        CoinManager.Instance.RotateTowards(transform);
-        CoinManager.Instance.OnCoinAcquiredChangeTarget(coinTile);
-        yield return new WaitUntil(() => CoinManager.Instance.pickUpTrash);
-        CoinManager.Instance.pickUpTrash = false;
+        AgentManager.Instance.RotateTowards(transform);
+        AgentManager.Instance.OnTrashPickedUpChangeTarget(trashTile);
+        yield return new WaitUntil(() => AgentManager.Instance.pickUpTrash);
+        AgentManager.Instance.pickUpTrash = false;
 
-        foreach (Transform child in CoinManager.Instance.trashBagTransform)
+        foreach (Transform child in AgentManager.Instance.trashBagTransform)
         {
-            CoinManager.Instance.currentValue++;
-            CoinManager.Instance.currentTXT.text = CoinManager.Instance.currentValue.ToString();
+            AgentManager.Instance.currentValue++;
+            AgentManager.Instance.currentTXT.text = AgentManager.Instance.currentValue.ToString();
             StartCoroutine(LerpTrashToTrashCan(child, 0.6f));
         }
         
-        if(CoinManager.Instance.currentValue >= CoinManager.Instance.coinRandomizer.nbCoins)
+        if(AgentManager.Instance.currentValue >= AgentManager.Instance.trashRandomizer.NumberofTrashToSpawn)
         {
-            CoinManager.Instance.winImg.SetActive(true);
+            AgentManager.Instance.winImg.SetActive(true);
             yield return new WaitForSeconds(1.25f);
             Time.timeScale = 0f;
         }
     }
 
-    public void AcquireTrashCan()
+    public void StartTrashcanCoroutine()
     {
         StartCoroutine(TrashCanCoroutine());
     }
@@ -119,7 +119,7 @@ public class Coin : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (isAchieved)
+        if (hasBeenPickedUp)
         {
             return;
         }
@@ -128,16 +128,16 @@ public class Coin : MonoBehaviour
         {
             if(tag == "Trash")
             {
-                if (!CoinManager.Instance.currentInTrashCan)
+                if (!AgentManager.Instance.currentlyOnTrashcan)
                 {
-                    AcquireCoin();
+                    OnTrashPickup();
                 }
             }
             else
             {
-                if (CoinManager.Instance.currentInTrashCan)
+                if (AgentManager.Instance.currentlyOnTrashcan)
                 {
-                    AcquireTrashCan();
+                    StartTrashcanCoroutine();
                 }
             }
         }

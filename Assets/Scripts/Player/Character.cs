@@ -5,7 +5,7 @@ using static UnityEngine.UI.Image;
 public class Character : MonoBehaviour
 {
     #region member fields
-    public bool Moving { get; set; } = false;
+    public bool Moving = false;
 
     public CharacterMoveData movedata;
     public Tile characterTile;
@@ -22,9 +22,6 @@ public class Character : MonoBehaviour
         FindTileAtStart();
     }
 
-    /// <summary>
-    /// If no starting tile has been manually assigned, we find one beneath us
-    /// </summary>
     public void FindTileAtStart()
     {
         if (characterTile != null)
@@ -101,8 +98,6 @@ public class Character : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log("CURRENT TILE TO REALLY MOVE TO : " + origin);
 
         transform.position = Vector3.Lerp(origin, destination, duration);
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(origin.DirectionTo(destination).Flat(), Vector3.up), 0.02f * 1.946055345814035f * 2f);

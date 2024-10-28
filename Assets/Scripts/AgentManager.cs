@@ -7,23 +7,22 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class CoinManager : Singleton<CoinManager>
+public class AgentManager : Singleton<AgentManager>
 {
-    public List<Coin> coins = new List<Coin>();
-    public List<Coin> trashCans = new List<Coin>();
-    public Coin currentTarget;
+    public List<Trash> trashPieces = new List<Trash>();
+    public List<Trash> trashCans = new List<Trash>();
+    public Trash currentTarget;
 
-    public Character selectedCharacter;
+    public Character agentCharacter;
     public Pathfinder pathfinder;
     Path Lastpath;
     Tile currentTile;
-
-    private int currentTrashLevel = 0;
+    private int currentTrashCount = 0;
     public int trashCapacity = 3;
 
     public Animator _animator;
 
-    public bool currentInTrashCan = false;
+    public bool currentlyOnTrashcan = false;
 
     public bool moveOn = false;
 
@@ -33,7 +32,7 @@ public class CoinManager : Singleton<CoinManager>
 
     public Transform trashBagTransform;
 
-    public CoinRandomizer coinRandomizer;
+    public TrashRandomizer trashRandomizer;
     public TextMeshProUGUI currentTXT;
     public TextMeshProUGUI totalTXT;
     public int currentValue = 0;
@@ -41,11 +40,11 @@ public class CoinManager : Singleton<CoinManager>
     public GameObject winImg;
 
     public bool gotUp = true;
-    public float upPushForce = 1.5f;
+    // public float upPushForce = 1.5f;
 
     public LayerMask GroundLayerMask;
 
-    public Transform raycastOrigin;
+     public Transform raycastOrigin;
 
     public Path oldPath;
 
@@ -79,29 +78,29 @@ public class CoinManager : Singleton<CoinManager>
     }
 
 
-    public void SetTarget(Coin coin)
+    public void SetTarget(Trash coin)
     {
         currentTarget = coin;
-        currentTile = coin.coinTile;
+        currentTile = coin.trashTile;
     }
 
     void GetAllCoinsByTag()
     {
-        coins = GameObject.FindGameObjectsWithTag("Trash").ToList().ConvertAll(x => x.GetComponent<Coin>());
-        trashCans = GameObject.FindGameObjectsWithTag("Trashcan").ToList().ConvertAll(x => x.GetComponent<Coin>());
+        trashPieces = GameObject.FindGameObjectsWithTag("Trash").ToList().ConvertAll(x => x.GetComponent<Trash>());
+        trashCans = GameObject.FindGameObjectsWithTag("Trashcan").ToList().ConvertAll(x => x.GetComponent<Trash>());
     }
 
     void GetClosestTrash()
     {
         float minDistance = Mathf.Infinity;
-        Coin closestCoin = null;
+        Trash closestCoin = null;
 
-        foreach (Coin coin in coins)
+        foreach (Trash coin in trashPieces)
         { 
             Debug.Log("Get Closest Coin foreach loop for coin == " + coin);
             if (coin)
             {
-                float distance = Vector3.Distance(selectedCharacter.transform.position, coin.transform.position);
+                float distance = Vector3.Distance(agentCharacter.transform.position, coin.transform.position);
                 if (distance < minDistance)
                 {
                     minDistance = distance;
@@ -115,13 +114,13 @@ public class CoinManager : Singleton<CoinManager>
     void GetClosestTrashCan()
     {
         float minDistance = Mathf.Infinity;
-        Coin closestCoin = null;
+        Trash closestCoin = null;
 
-        foreach (Coin trashCan in trashCans)
+        foreach (Trash trashCan in trashCans)
         {
             if (trashCan)
             {
-                float distance = Vector3.Distance(selectedCharacter.transform.position, trashCan.transform.position);
+                float distance = Vector3.Distance(agentCharacter.transform.position, trashCan.transform.position);
                 if (distance < minDistance)
                 {
                     minDistance = distance;
@@ -136,18 +135,19 @@ public class CoinManager : Singleton<CoinManager>
     public void GetHitByDog()
     {
         gotUp = false;
-        selectedCharacter.Moving = false;
-        selectedCharacter.stopMoving = true;
+        agentCharacter.Moving = false;
+        agentCharacter.stopMoving = true;
         /*selectedCharacter.stopMoving = true;
         selectedCharacter.Moving = false;
         selectedCharacter.characterTile.Occupied = true;
         selectedCharacter.characterTile.occupyingCharacter = selectedCharacter;
+        */
         if (Physics.Raycast(raycastOrigin.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
         {
-            Debug.Log("Found a tile below me");
-            selectedCharacter.characterTile = hit.transform.GetComponent<Tile>();
-            Debug.Log("selectedCharacter.characterTile : " + selectedCharacter.characterTile);
-        }*/
+            Debug.Log("<color=red>Found a tile below me</color>");
+            agentCharacter.characterTile = hit.transform.GetComponent<Tile>();
+            Debug.Log("<color=red>selectedCharacter.characterTile : </color>" + agentCharacter.characterTile);
+        }
         _animator.SetTrigger("GetHit"); 
         StartCoroutine(AwaitGetUp());
     }
@@ -175,35 +175,33 @@ public class CoinManager : Singleton<CoinManager>
         }
         */
         yield return new WaitUntil(() => gotUp);
+        Debug.Log("I GOT UP YAZEBI");
 
-        Debug.Log("I just got up");
+        agentCharacter.Moving = false;
+        moveOn = true;
+  
 
-        Debug.Log("Let's raycast down");
-
-        selectedCharacter.Moving = true;
-        selectedCharacter.stopMoving = false;
-
-        selectedCharacter.StartMove(oldPath);
-        //StartCoroutine(SelectNextTarget());
+        // agentCharacter.StartMove(oldPath);
+        StartCoroutine(SelectNextTarget());
     }
 
-    private IEnumerator TrashReset(Transform trashChild)
-    {
-        Coin _coin = trashChild.GetComponent<Coin>();
-        coins.Add(_coin);
-        _coin.ReStart();
-        yield return new WaitForSeconds(6f);
-        Rigidbody rb = trashChild.GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezeAll;
-        rb.useGravity = false;
-        rb.isKinematic = true;
-        _coin.ReStart();
-    }
+    // private IEnumerator TrashReset(Transform trashChild)
+    // {
+    //     Trash _coin = trashChild.GetComponent<Trash>();
+    //     coins.Add(_coin);
+    //     _coin.ReStart();
+    //     yield return new WaitForSeconds(6f);
+    //     Rigidbody rb = trashChild.GetComponent<Rigidbody>();
+    //     rb.constraints = RigidbodyConstraints.FreezeAll;
+    //     rb.useGravity = false;
+    //     rb.isKinematic = true;
+    //     _coin.ReStart();
+    // }
 
     void Start()
     {
         Invoke("DelayedStart", 3f);
-        totalTXT.text = coinRandomizer.nbCoins.ToString();
+        totalTXT.text = trashRandomizer.NumberofTrashToSpawn.ToString();
     }
 
     void DelayedStart()
@@ -216,33 +214,30 @@ public class CoinManager : Singleton<CoinManager>
         NavigateToTile();
     }
 
-    public void OnCoinAcquiredChangeTarget(Tile coinTile)
+    public void OnTrashPickedUpChangeTarget(Tile coinTile)
     {
-        selectedCharacter.stopMoving = true;
-        selectedCharacter.Moving = false;
+        agentCharacter.stopMoving = true;
+        agentCharacter.Moving = false;
+        agentCharacter.characterTile = coinTile;
+        agentCharacter.characterTile.Occupied = true;
+        agentCharacter.characterTile.occupyingCharacter = agentCharacter;
 
-        selectedCharacter.characterTile = coinTile;
-
-        selectedCharacter.Moving = false;
-        selectedCharacter.characterTile.Occupied = true;
-        selectedCharacter.characterTile.occupyingCharacter = selectedCharacter;
-
-        if (currentInTrashCan)
+        if (currentlyOnTrashcan)
         {
             _animator.SetTrigger("Throw");
-            currentInTrashCan = !currentInTrashCan;
-            currentTrashLevel = 0;
+            currentlyOnTrashcan = !currentlyOnTrashcan;
+            currentTrashCount = 0;
         }
         else
         {
             _animator.SetTrigger("PickUp");
-            currentTrashLevel++;
+            currentTrashCount++;
         }
 
-        if(currentTrashLevel >= trashCapacity)
+        if(currentTrashCount >= trashCapacity)
         {
-            currentInTrashCan = !currentInTrashCan;
-            currentTrashLevel = 0;
+            currentlyOnTrashcan = !currentlyOnTrashcan;
+            currentTrashCount = 0;
         }
 
         StartCoroutine(SelectNextTarget());
@@ -253,7 +248,7 @@ public class CoinManager : Singleton<CoinManager>
         yield return new WaitUntil(() => moveOn);
         moveOn = false;
         Debug.Log("I'm Here");
-        if (currentInTrashCan)
+        if (currentlyOnTrashcan)
         {
             GetClosestTrashCan();
         }
@@ -267,8 +262,8 @@ public class CoinManager : Singleton<CoinManager>
     }
 
     private void NavigateToTile()
-    {
-        if (selectedCharacter == null || selectedCharacter.Moving == true)
+    {   Debug.Log("3ASBA TREYA");
+        if (agentCharacter == null || agentCharacter.Moving == true)
         {
             return;
         }
@@ -279,8 +274,8 @@ public class CoinManager : Singleton<CoinManager>
         if (RetrievePath(out Path newPath))
         {
             oldPath = newPath;
-            selectedCharacter.stopMoving = false;
-            selectedCharacter.StartMove(newPath);
+            agentCharacter.stopMoving = false;
+            agentCharacter.StartMove(newPath);
             //   selectedCharacter = null;
         }
     }
@@ -288,7 +283,7 @@ public class CoinManager : Singleton<CoinManager>
     bool RetrievePath(out Path path)
     {
         Debug.Log("CurrentTile: " + currentTile);
-        path = pathfinder.FindPath(selectedCharacter.characterTile, currentTile);
+        path = pathfinder.FindPath(agentCharacter.characterTile, currentTile);
 
         if (path == null || path == Lastpath)
             return false;

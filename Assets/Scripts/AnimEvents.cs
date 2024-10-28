@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AnimEvents : MonoBehaviour
 {
-    public CoinManager _coinManager;
+    public AgentManager _agentManager;
     public Animator _animator;
 
     private void Update()
@@ -17,16 +17,16 @@ public class AnimEvents : MonoBehaviour
 
     public void MoveOn()
     {
-        _coinManager.moveOn = true;
+        _agentManager.moveOn = true;
     }
 
     public void CollectTrash()
     {
-        _coinManager.pickUpTrash = true;
+        _agentManager.pickUpTrash = true;
     }
 
     public void GetUp()
     {
-        _coinManager.gotUp = true;
+        _agentManager.gotUp = true;
     }
 }
