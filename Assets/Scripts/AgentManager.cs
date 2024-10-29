@@ -204,8 +204,6 @@ public class AgentManager : Singleton<AgentManager>
 
         _coin.ReStart();
         
-
-
         _coin.transform.GetChild(1).gameObject.SetActive(true);
         trashPieces.Add(_coin);
     }
