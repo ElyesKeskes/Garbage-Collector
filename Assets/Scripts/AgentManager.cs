@@ -40,13 +40,15 @@ public class AgentManager : Singleton<AgentManager>
     public GameObject winImg;
 
     public bool gotUp = true;
-    // public float upPushForce = 1.5f;
+    public float upPushForce = 1.5f;
 
     public LayerMask GroundLayerMask;
 
      public Transform raycastOrigin;
 
     public Path oldPath;
+
+    public CharacterResetPos _characterResetPos;
 
     public void RotateTowards(Transform target)
     {
@@ -137,24 +139,21 @@ public class AgentManager : Singleton<AgentManager>
         gotUp = false;
         agentCharacter.Moving = false;
         agentCharacter.stopMoving = true;
-        /*selectedCharacter.stopMoving = true;
-        selectedCharacter.Moving = false;
-        selectedCharacter.characterTile.Occupied = true;
-        selectedCharacter.characterTile.occupyingCharacter = selectedCharacter;
-        */
         if (Physics.Raycast(raycastOrigin.position, -transform.up, out RaycastHit hit, 50f, GroundLayerMask))
         {
             Debug.Log("<color=red>Found a tile below me</color>");
             agentCharacter.characterTile = hit.transform.GetComponent<Tile>();
             Debug.Log("<color=red>selectedCharacter.characterTile : </color>" + agentCharacter.characterTile);
         }
-        _animator.SetTrigger("GetHit"); 
+        _animator.SetTrigger("GetHit");
+        _characterResetPos.enabled = true;
+        currentTrashCount = 0;
         StartCoroutine(AwaitGetUp());
     }
 
     private IEnumerator AwaitGetUp()
     {
-        /*List<Transform> trashChildList = new List<Transform>();
+        List<Transform> trashChildList = new List<Transform>();
         foreach (Transform trashChild in trashBagTransform)
         {
             trashChildList.Add(trashChild);
@@ -173,8 +172,10 @@ public class AgentManager : Singleton<AgentManager>
 
             StartCoroutine(TrashReset(trashChild));
         }
-        */
+        
+
         yield return new WaitUntil(() => gotUp);
+        _characterResetPos.enabled = false;
         Debug.Log("I GOT UP YAZEBI");
 
         agentCharacter.Moving = false;
@@ -185,18 +186,29 @@ public class AgentManager : Singleton<AgentManager>
         StartCoroutine(SelectNextTarget());
     }
 
-    // private IEnumerator TrashReset(Transform trashChild)
-    // {
-    //     Trash _coin = trashChild.GetComponent<Trash>();
-    //     coins.Add(_coin);
-    //     _coin.ReStart();
-    //     yield return new WaitForSeconds(6f);
-    //     Rigidbody rb = trashChild.GetComponent<Rigidbody>();
-    //     rb.constraints = RigidbodyConstraints.FreezeAll;
-    //     rb.useGravity = false;
-    //     rb.isKinematic = true;
-    //     _coin.ReStart();
-    // }
+    private IEnumerator TrashReset(Transform trashChild)
+    {
+        Trash _coin = trashChild.GetComponent<Trash>();
+        yield return new WaitForSeconds(2.25f);
+        Rigidbody rb = trashChild.GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        rb.useGravity = false;
+        rb.isKinematic = true;
+
+        Rigidbody newRb = trashChild.GetChild(0).GetComponent<Rigidbody>();
+        newRb.isKinematic = false;
+        newRb.useGravity = true;
+        newRb.constraints = RigidbodyConstraints.None;
+
+        _coin.hasBeenPickedUp = false;
+
+        _coin.ReStart();
+        
+
+
+        _coin.transform.GetChild(1).gameObject.SetActive(true);
+        trashPieces.Add(_coin);
+    }
 
     void Start()
     {

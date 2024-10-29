@@ -93,7 +93,7 @@ public class DogBehavior : MonoBehaviour
             if (Vector3.Distance(transform.position, player.position) < chaseDistance && biteFinished)
             {
                 yield return new WaitUntil(() => player.parent.GetComponent<AgentManager>()._animator.GetCurrentAnimatorStateInfo(0).IsName("WalkForward"));
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.25f);
                 biteFinished = false;
                 _animator.SetTrigger("Bite");
 

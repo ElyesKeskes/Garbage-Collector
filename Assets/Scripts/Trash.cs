@@ -13,9 +13,17 @@ public class Trash : MonoBehaviour
 
     public void ReStart()
     {
-        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 150f, GroundLayerMask))
+        Debug.Log("Restarting : " + transform.GetChild(0).name);
+        if (Physics.Raycast(transform.GetChild(0).position, -transform.GetChild(0).up, out RaycastHit hit, 150f, GroundLayerMask))
         {
             trashTile = hit.transform.GetComponent<Tile>();
+            Debug.Log("Found a tile for : " + transform.GetChild(0).name + " its the tile : " + trashTile.name);
+            transform.position = new Vector3(trashTile.transform.position.x, trashTile.transform.position.y + 0.5f, trashTile.transform.position.z);
+        }
+        else
+        {
+            Transform newPos = AgentManager.Instance.agentCharacter.characterTile.connectedTile.transform;
+            transform.position = new Vector3(newPos.position.x, newPos.position.y + 0.5f, newPos.position.z);
         }
     }
 
@@ -30,7 +38,7 @@ public class Trash : MonoBehaviour
     public void OnTrashPickup()
     {
         hasBeenPickedUp = true;
-        Destroy(transform.GetChild(1).gameObject);
+        transform.GetChild(1).gameObject.SetActive(false);
         StartCoroutine(GetTrash());
     }
 
