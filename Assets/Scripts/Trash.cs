@@ -10,8 +10,7 @@ public class Trash : MonoBehaviour
 
     [SerializeField] LayerMask GroundLayerMask;
 
-
-    public void ReStart()
+    public void ReStart(AgentManager _agentManager)
     {
         Debug.Log("Restarting : " + transform.GetChild(0).name);
         if (Physics.Raycast(transform.GetChild(0).position, -transform.GetChild(0).up, out RaycastHit hit, 150f, GroundLayerMask))
@@ -22,7 +21,7 @@ public class Trash : MonoBehaviour
         }
         else
         {
-            Transform newPos = AgentManager.Instance.agentCharacter.characterTile.connectedTile.transform;
+            Transform newPos = _agentManager.agentCharacter.characterTile.connectedTile.transform;
             transform.position = new Vector3(newPos.position.x, newPos.position.y + 0.5f, newPos.position.z);
         }
     }
@@ -35,34 +34,34 @@ public class Trash : MonoBehaviour
         }
     }
 
-    public void OnTrashPickup()
+    public void OnTrashPickup(AgentManager _agentManager)
     {
         hasBeenPickedUp = true;
         transform.GetChild(1).gameObject.SetActive(false);
-        StartCoroutine(GetTrash());
+        StartCoroutine(GetTrash(_agentManager));
     }
 
-    private IEnumerator GetTrash()
+    private IEnumerator GetTrash(AgentManager _agentManager)
     {
-        AgentManager.Instance.RotateTowards(transform.GetChild(0));
-        AgentManager.Instance.pickUpTrash = false;
-        AgentManager.Instance.trashPieces.Remove(this);
-        AgentManager.Instance.OnTrashPickedUpChangeTarget(trashTile);
-        yield return new WaitUntil(() => AgentManager.Instance.pickUpTrash);
+        _agentManager.RotateTowards(transform.GetChild(0));
+        _agentManager.pickUpTrash = false;
+        _agentManager.trashPieces.Remove(this);
+        _agentManager.OnTrashPickedUpChangeTarget(trashTile);
+        yield return new WaitUntil(() => _agentManager.pickUpTrash);
 
-        AgentManager.Instance.pickUpTrash = false;
+        _agentManager.pickUpTrash = false;
         Rigidbody rb = transform.GetChild(0).GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.isKinematic = true;
         transform.GetChild(0).transform.localPosition = Vector3.zero;
         transform.GetChild(0).transform.localRotation = Quaternion.identity;
-        transform.parent = AgentManager.Instance.handTransform;
+        transform.parent = _agentManager.handTransform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-        yield return new WaitUntil(() => AgentManager.Instance.pickUpTrash);
+        yield return new WaitUntil(() => _agentManager.pickUpTrash);
 
-        AgentManager.Instance.pickUpTrash = false;
-        transform.parent = AgentManager.Instance.trashBagTransform;
+        _agentManager.pickUpTrash = false;
+        transform.parent = _agentManager.trashBagTransform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     }
@@ -92,31 +91,31 @@ public class Trash : MonoBehaviour
     }
 
 
-    private IEnumerator TrashCanCoroutine()
+    private IEnumerator TrashCanCoroutine(AgentManager _agentManager)
     {
-        AgentManager.Instance.RotateTowards(transform);
-        AgentManager.Instance.OnTrashPickedUpChangeTarget(trashTile);
-        yield return new WaitUntil(() => AgentManager.Instance.pickUpTrash);
-        AgentManager.Instance.pickUpTrash = false;
+        _agentManager.RotateTowards(transform);
+        _agentManager.OnTrashPickedUpChangeTarget(trashTile);
+        yield return new WaitUntil(() => _agentManager.pickUpTrash);
+        _agentManager.pickUpTrash = false;
 
-        foreach (Transform child in AgentManager.Instance.trashBagTransform)
+        foreach (Transform child in _agentManager.trashBagTransform)
         {
-            AgentManager.Instance.currentValue++;
-            AgentManager.Instance.currentTXT.text = AgentManager.Instance.currentValue.ToString();
+            _agentManager.currentValue++;
+            _agentManager.currentTXT.text = _agentManager.currentValue.ToString();
             StartCoroutine(LerpTrashToTrashCan(child, 0.6f));
         }
         
-        if(AgentManager.Instance.currentValue >= AgentManager.Instance.trashRandomizer.NumberofTrashToSpawn)
+        if(_agentManager.currentValue >= _agentManager.trashRandomizer.NumberofTrashToSpawn)
         {
-            AgentManager.Instance.winImg.SetActive(true);
+            _agentManager.winImg.SetActive(true);
             yield return new WaitForSeconds(1.25f);
             Time.timeScale = 0f;
         }
     }
 
-    public void StartTrashcanCoroutine()
+    public void StartTrashcanCoroutine(AgentManager _agentManager)
     {
-        StartCoroutine(TrashCanCoroutine());
+        StartCoroutine(TrashCanCoroutine(_agentManager));
     }
 
     void OnDrawGizmos()
@@ -134,18 +133,20 @@ public class Trash : MonoBehaviour
 
         if (other.tag == "Player")
         {
+            AgentManager _agentManager = other.transform.parent.GetComponent<AgentManager>();
+
             if(tag == "Trash")
             {
-                if (!AgentManager.Instance.currentlyOnTrashcan)
+                if (!_agentManager.currentlyOnTrashcan)
                 {
-                    OnTrashPickup();
+                    OnTrashPickup(_agentManager);
                 }
             }
             else
             {
-                if (AgentManager.Instance.currentlyOnTrashcan)
+                if (_agentManager.currentlyOnTrashcan)
                 {
-                    StartTrashcanCoroutine();
+                    StartTrashcanCoroutine(_agentManager);
                 }
             }
         }

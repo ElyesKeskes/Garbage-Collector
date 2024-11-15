@@ -32,7 +32,6 @@ public class DogBehavior : MonoBehaviour
     {
         while (isPatrolling)
         {
-            // Try to find a valid random patrol position within patrolRadius
             Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
             randomDirection += transform.position;
             NavMeshHit hit;
@@ -41,7 +40,6 @@ public class DogBehavior : MonoBehaviour
 
             if (NavMesh.SamplePosition(randomDirection, out hit, patrolRadius, NavMesh.AllAreas))
             {
-                // Check if the position is reachable by using NavMesh.Raycast
                 if (!NavMesh.Raycast(transform.position, hit.position, out _, NavMesh.AllAreas))
                 {
                     foundValidPosition = true;
@@ -49,14 +47,12 @@ public class DogBehavior : MonoBehaviour
                 }
             }
 
-            // Only proceed if a valid position was found
             if (foundValidPosition)
             {
                 _animator.SetBool("isWalking", true);
                 _animator.SetBool("isIdle", false);
                 _animator.SetBool("isRunning", false);
 
-                // Wait until the dog arrives at the patrol position
                 yield return new WaitUntil(() => Vector3.Distance(transform.position, hit.position) < 1f);
                 _animator.SetBool("isWalking", false);
                 _animator.SetBool("isIdle", true);
@@ -65,12 +61,10 @@ public class DogBehavior : MonoBehaviour
             }
             else
             {
-                // Retry if no valid position was found
                 yield return null;
             }
         }
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -89,7 +83,6 @@ public class DogBehavior : MonoBehaviour
         {
             agent.SetDestination(player.position);
 
-            // Check the distance to the player
             if (Vector3.Distance(transform.position, player.position) < chaseDistance && biteFinished)
             {
                 yield return new WaitUntil(() => player.parent.GetComponent<AgentManager>()._animator.GetCurrentAnimatorStateInfo(0).IsName("WalkForward"));
@@ -97,10 +90,8 @@ public class DogBehavior : MonoBehaviour
                 biteFinished = false;
                 _animator.SetTrigger("Bite");
 
-                // Wait for bite animation to finish
                 yield return new WaitUntil(() => biteFinished);
 
-                // Switch to backup mode after biting
                 StartCoroutine(GoToBackupPoint());
                 yield break;
             }
@@ -111,7 +102,6 @@ public class DogBehavior : MonoBehaviour
 
     private IEnumerator GoToBackupPoint()
     {
-        // Find the furthest point in the backupPoints array from the player
         Transform furthestPoint = null;
         float maxDistance = 0f;
 
@@ -125,21 +115,17 @@ public class DogBehavior : MonoBehaviour
             }
         }
 
-        // Set the destination to the furthest backup point
         if (furthestPoint != null)
         {
             agent.SetDestination(furthestPoint.position);
         }
 
-        // Keep checking the distance to the backup point
         yield return new WaitUntil(() => Vector3.Distance(transform.position, furthestPoint.position) < 1f);
 
-        // Return to patrol state after reaching the backup point
         isChasing = false;
         isPatrolling = true;
         StartCoroutine(Patrol());
     }
-
 
     public void SwitchBite()
     {

@@ -7,7 +7,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class AgentManager : Singleton<AgentManager>
+public class AgentManager : MonoBehaviour
 {
     public List<Trash> trashPieces = new List<Trash>();
     public List<Trash> trashCans = new List<Trash>();
@@ -176,7 +176,6 @@ public class AgentManager : Singleton<AgentManager>
 
         yield return new WaitUntil(() => gotUp);
         _characterResetPos.enabled = false;
-        Debug.Log("I GOT UP YAZEBI");
 
         agentCharacter.Moving = false;
         moveOn = true;
@@ -202,7 +201,7 @@ public class AgentManager : Singleton<AgentManager>
 
         _coin.hasBeenPickedUp = false;
 
-        _coin.ReStart();
+        _coin.ReStart(this);
         
         _coin.transform.GetChild(1).gameObject.SetActive(true);
         trashPieces.Add(_coin);
