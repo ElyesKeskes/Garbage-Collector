@@ -12,6 +12,8 @@ public class TrashRandomizer : MonoBehaviour
 
     private List<Transform> occupiedTiles = new List<Transform>();
 
+
+    public MonteCarloAgent _monteCarloAgent;
     private void Start()
     {
         Invoke("StartWithDelay", 1f);
@@ -64,5 +66,7 @@ public class TrashRandomizer : MonoBehaviour
             Instantiate(trashPrefab, spawnPosition, Quaternion.identity);
             selectedTile.GetComponent<Tile>().ModifyCostTrash();
         }
+
+
     }
 }
