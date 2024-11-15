@@ -50,6 +50,10 @@ public class AgentManager : MonoBehaviour
 
     public CharacterResetPos _characterResetPos;
 
+    public MonteCarloAgent _monteCarloAgent;
+
+    public AdHocCharacter _adHocCharacter;
+
     public void RotateTowards(Transform target)
     {
         StartCoroutine(RotateSmoothly(target, 0.5f));
@@ -89,10 +93,12 @@ public class AgentManager : MonoBehaviour
     void GetAllCoinsByTag()
     {
         trashPieces = GameObject.FindGameObjectsWithTag("Trash").ToList().ConvertAll(x => x.GetComponent<Trash>());
+        _monteCarloAgent.enabled = true;
+        _adHocCharacter.enabled = true;
         trashCans = GameObject.FindGameObjectsWithTag("Trashcan").ToList().ConvertAll(x => x.GetComponent<Trash>());
     }
 
-    void GetClosestTrash()
+    public void GetClosestTrash()
     {
         float minDistance = Mathf.Infinity;
         Trash closestCoin = null;
@@ -252,11 +258,10 @@ public class AgentManager : MonoBehaviour
         StartCoroutine(SelectNextTarget());
     }
 
-    private IEnumerator SelectNextTarget()
+    public IEnumerator SelectNextTarget()
     {
         yield return new WaitUntil(() => moveOn);
         moveOn = false;
-        Debug.Log("I'm Here");
         if (currentlyOnTrashcan)
         {
             GetClosestTrashCan();
@@ -270,15 +275,12 @@ public class AgentManager : MonoBehaviour
         NavigateToTile();
     }
 
-    private void NavigateToTile()
-    {   Debug.Log("3ASBA TREYA");
+    public void NavigateToTile()
+    {
         if (agentCharacter == null || agentCharacter.Moving == true)
         {
             return;
         }
-
-        Debug.Log("i'm retrieving path");
-
 
         if (RetrievePath(out Path newPath))
         {
@@ -291,14 +293,10 @@ public class AgentManager : MonoBehaviour
 
     bool RetrievePath(out Path path)
     {
-        Debug.Log("CurrentTile: " + currentTile);
         path = pathfinder.FindPath(agentCharacter.characterTile, currentTile);
 
         if (path == null || path == Lastpath)
             return false;
         return true;
     }
-
-
-
 }

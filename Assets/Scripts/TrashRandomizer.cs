@@ -11,9 +11,6 @@ public class TrashRandomizer : MonoBehaviour
     public Transform trashCanParent;
 
     private List<Transform> occupiedTiles = new List<Transform>();
-
-
-    public MonteCarloAgent _monteCarloAgent;
     private void Start()
     {
         Invoke("StartWithDelay", 1f);

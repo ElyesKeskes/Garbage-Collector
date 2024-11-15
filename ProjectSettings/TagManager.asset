@@ -18,6 +18,8 @@ TagManager:
   - Trash
   - Trashcan
   - Bite
+  - PlayerMonteCarlo
+  - PlayerAdHoc
   layers:
   - Default
   - TransparentFX

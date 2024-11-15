@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.UI;
 
 public class DogBehavior : MonoBehaviour
 {
@@ -68,8 +70,9 @@ public class DogBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !isChasing)
+        if (other.CompareTag("Player") || other.CompareTag("PlayerMonteCarlo") || other.CompareTag("PlayerAdHoc") && !isChasing)
         {
+            player = other.transform;
             isChasing = true;
             isPatrolling = false;
             StopCoroutine(Patrol());
@@ -85,7 +88,22 @@ public class DogBehavior : MonoBehaviour
 
             if (Vector3.Distance(transform.position, player.position) < chaseDistance && biteFinished)
             {
-                yield return new WaitUntil(() => player.parent.GetComponent<AgentManager>()._animator.GetCurrentAnimatorStateInfo(0).IsName("WalkForward"));
+                if (player.parent.GetComponent<AgentManager>())
+                {
+                    yield return new WaitUntil(() => player.parent.GetComponent<AgentManager>()._animator.GetCurrentAnimatorStateInfo(0).IsName("WalkForward"));
+                }
+                else
+                {
+                    if (player.GetComponent<MonteCarloAgent>())
+                    {
+                        yield return new WaitUntil(() => player.GetComponent<MonteCarloAgent>()._animator.GetCurrentAnimatorStateInfo(0).IsName("WalkForward"));
+                    }
+                    else
+                    {
+                        yield return new WaitUntil(() => player.GetComponent<AdHocCharacter>()._animator.GetCurrentAnimatorStateInfo(0).IsName("WalkForward"));
+                    }
+                }
+                
                 yield return new WaitForSeconds(0.25f);
                 biteFinished = false;
                 _animator.SetTrigger("Bite");
@@ -134,6 +152,8 @@ public class DogBehavior : MonoBehaviour
 
     public void HitPlayer()
     {
-        player.parent.GetComponent<AgentManager>().GetHitByDog();
+        player.parent.GetComponent<AgentManager>()?.GetHitByDog();
+        player.GetComponent<MonteCarloAgent>()?.GetHitByDog();
+        player.GetComponent<AdHocCharacter>()?.GetHitByDog();
     }
 }
