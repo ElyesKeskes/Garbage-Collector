@@ -35,7 +35,7 @@ public class MonteCarloAgent : MonoBehaviour
         float startTime = Time.time;
         while (Time.time - startTime < decisionTime)
         {
-            if (currentlyOnTrashcan || ((_agentManager.trashPieces.Count == 0) && (currentTrashCount > 0)))
+            if (currentlyOnTrashcan || (_agentManager.trashPieces.Count == 0))
             {
                 foreach (Trash item in _agentManager.trashCans)
                 {
@@ -55,6 +55,19 @@ public class MonteCarloAgent : MonoBehaviour
                     {
                         bestScore = score;
                         bestItem = item.transform;
+                    }
+                }
+
+                if (!bestItem)
+                {
+                    foreach (Trash item in _agentManager.trashCans)
+                    {
+                        float score = Simulate(item.transform);
+                        if (score > bestScore)
+                        {
+                            bestScore = score;
+                            bestItem = item.transform;
+                        }
                     }
                 }
             }
@@ -116,7 +129,7 @@ public class MonteCarloAgent : MonoBehaviour
     public void GetHitByDog()
     {
         gotUp = false;
-        navMeshAgent.ResetPath();
+        navMeshAgent.SetDestination(transform.position);
         _animator.SetTrigger("GetHit");
         currentTrashCount = 0;
         StartCoroutine(AwaitGetUp());
@@ -147,7 +160,7 @@ public class MonteCarloAgent : MonoBehaviour
 
         yield return new WaitUntil(() => gotUp);
 
-        navMeshAgent.ResetPath();
+        navMeshAgent.SetDestination(transform.position);
         moveOn = true;
 
 

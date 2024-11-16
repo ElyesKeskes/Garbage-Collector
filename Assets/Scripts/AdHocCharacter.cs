@@ -30,7 +30,7 @@ public class AdHocCharacter : MonoBehaviour
         // Reset target
         targetItem = null;
 
-        if (currentlyOnTrashcan || ((_agentManager.trashPieces.Count == 0) && (currentTrashCount > 0)))
+        if (currentlyOnTrashcan || ((_agentManager.trashPieces.Count <= 0)))
         {
             // Find the closest trash can
             Transform closestTrashCan = null;
@@ -67,6 +67,27 @@ public class AdHocCharacter : MonoBehaviour
 
             // Set the target item to the closest trash piece
             targetItem = trashToSelect;
+
+            if (!trashToSelect)
+            {
+                // Find the closest trash can
+                Transform closestTrashCan = null;
+                closestDistance = float.MaxValue;
+
+                foreach (Trash item in _agentManager.trashCans)
+                {
+                    float distance = Vector3.Distance(transform.position, item.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestTrashCan = item.transform;
+                    }
+                }
+
+                // Set the target item to the closest trash can
+                targetItem = closestTrashCan;
+            }
+            
         }
 
         // If we have a valid target, set the destination
@@ -114,7 +135,7 @@ public class AdHocCharacter : MonoBehaviour
     public void GetHitByDog()
     {
         gotUp = false;
-        navMeshAgent.ResetPath();
+        navMeshAgent.SetDestination(transform.position);
         _animator.SetTrigger("GetHit");
         currentTrashCount = 0;
         StartCoroutine(AwaitGetUp());
@@ -145,7 +166,7 @@ public class AdHocCharacter : MonoBehaviour
 
         yield return new WaitUntil(() => gotUp);
 
-        navMeshAgent.ResetPath();
+        navMeshAgent.SetDestination(transform.position);
         moveOn = true;
 
 

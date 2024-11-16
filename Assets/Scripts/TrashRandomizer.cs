@@ -59,7 +59,7 @@ public class TrashRandomizer : MonoBehaviour
             usedIndexes.Add(randomIndex);
 
             Transform selectedTile = tileList[randomIndex];
-            Vector3 spawnPosition = selectedTile.position + Vector3.up * 0.5f;
+            Vector3 spawnPosition = selectedTile.position + Vector3.up * 0.7f;
 
             Instantiate(trashPrefab, spawnPosition, Quaternion.identity);
             selectedTile.GetComponent<Tile>().ModifyCostTrash();

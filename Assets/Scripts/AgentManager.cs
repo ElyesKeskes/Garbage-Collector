@@ -266,16 +266,19 @@ public class AgentManager : MonoBehaviour
     {
         yield return new WaitUntil(() => moveOn);
         moveOn = false;
-        if (currentlyOnTrashcan || ((trashPieces.Count == 0) && (currentTrashCount > 0)))
+        if (currentlyOnTrashcan || (trashPieces.Count == 0))
         {
             GetClosestTrashCan();
         }
         else
         {
             GetClosestTrash();
+            if (!currentTarget)
+            {
+                GetClosestTrashCan();
+            }
         }
 
-        
         NavigateToTile();
     }
 

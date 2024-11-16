@@ -34,9 +34,17 @@ public class UIController : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0)) {
             changeCam();
         }
-        if(_agentManager.trashRandomizer.NumberofTrashToSpawn == (_monteCarloAgent.currentTrashCount + _adHocCharacter.currentTrashCount + _agentManager.currentTrashCount))
+        if(_agentManager.trashRandomizer.NumberofTrashToSpawn - 1 == (_monteCarloAgent.TotalTrashCollected + _adHocCharacter.TotalTrashCollected + _agentManager.TotalTrashCollected) ||
+            _agentManager.trashRandomizer.NumberofTrashToSpawn == (_monteCarloAgent.TotalTrashCollected + _adHocCharacter.TotalTrashCollected + _agentManager.TotalTrashCollected))
         {
-            Compare(_agentManager.currentTrashCount, _adHocCharacter.currentTrashCount, _monteCarloAgent.currentTrashCount);
+            Compare(_agentManager.TotalTrashCollected, _adHocCharacter.TotalTrashCollected, _monteCarloAgent.TotalTrashCollected);
+        }
+        else
+        {
+            if(_agentManager.trashRandomizer.NumberofTrashToSpawn - 1 <= (_monteCarloAgent.currentTrashCount + _adHocCharacter.currentTrashCount + _agentManager.currentTrashCount) + (_monteCarloAgent.TotalTrashCollected + _adHocCharacter.TotalTrashCollected + _agentManager.TotalTrashCollected))
+            {
+                Compare(_agentManager.TotalTrashCollected, _adHocCharacter.TotalTrashCollected, _monteCarloAgent.TotalTrashCollected);
+            }
         }
     }
 
@@ -84,9 +92,9 @@ public class UIController : MonoBehaviour
     private IEnumerator Start()
     {
         yield return new WaitForSeconds(3f);
-        _agentManagerCapText.text = _agentManager.trashRandomizer.NumberofTrashToSpawn.ToString();
-        _adHocCharacterCapText.text = _agentManager.trashRandomizer.NumberofTrashToSpawn.ToString();
-        _monteCarloAgentCapText.text = _agentManager.trashRandomizer.NumberofTrashToSpawn.ToString();
+        _agentManagerCapText.text = (_agentManager.trashRandomizer.NumberofTrashToSpawn - 1).ToString();
+        _adHocCharacterCapText.text = (_agentManager.trashRandomizer.NumberofTrashToSpawn - 1).ToString();
+        _monteCarloAgentCapText.text = (_agentManager.trashRandomizer.NumberofTrashToSpawn - 1).ToString();
     }
     
 }
