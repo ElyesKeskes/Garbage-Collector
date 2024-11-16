@@ -217,7 +217,7 @@ public class AgentManager : MonoBehaviour
     void Start()
     {
         Invoke("DelayedStart", 3f);
-        totalTXT.text = trashRandomizer.NumberofTrashToSpawn.ToString();
+        // totalTXT.text = trashRandomizer.NumberofTrashToSpawn.ToString();
     }
 
     void DelayedStart()
