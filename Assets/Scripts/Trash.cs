@@ -199,12 +199,7 @@ public class Trash : MonoBehaviour
             StartCoroutine(LerpTrashToTrashCan(child, 0.6f));
         }
         
-        if(_agentManager.currentValue >= _agentManager.trashRandomizer.NumberofTrashToSpawn)
-        {
-            _agentManager.winImg.SetActive(true);
-            yield return new WaitForSeconds(1.25f);
-            Time.timeScale = 0f;
-        }
+
     }
 
     private IEnumerator TrashCanCoroutine(MonteCarloAgent monteCarloAgent)
@@ -220,12 +215,6 @@ public class Trash : MonoBehaviour
             StartCoroutine(LerpTrashToTrashCan(child, 0.6f));
         }
 
-        if (monteCarloAgent.currentValue >= monteCarloAgent._agentManager.trashRandomizer.NumberofTrashToSpawn)
-        {
-            //monteCarloAgent.winImg.SetActive(true);
-            yield return new WaitForSeconds(1.25f);
-            Time.timeScale = 0f;
-        }
     }
 
     private IEnumerator TrashCanCoroutine(AdHocCharacter _adHocCharacter)
@@ -241,12 +230,7 @@ public class Trash : MonoBehaviour
             StartCoroutine(LerpTrashToTrashCan(child, 0.6f));
         }
 
-        if (_adHocCharacter.currentValue >= _adHocCharacter._agentManager.trashRandomizer.NumberofTrashToSpawn)
-        {
-            //monteCarloAgent.winImg.SetActive(true);
-            yield return new WaitForSeconds(1.25f);
-            Time.timeScale = 0f;
-        }
+
     }
 
     public void StartTrashcanCoroutine(AgentManager _agentManager)

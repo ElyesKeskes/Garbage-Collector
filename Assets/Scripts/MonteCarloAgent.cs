@@ -35,7 +35,18 @@ public class MonteCarloAgent : MonoBehaviour
         float startTime = Time.time;
         while (Time.time - startTime < decisionTime)
         {
-            if (!currentlyOnTrashcan)
+            if (currentlyOnTrashcan || ((_agentManager.trashPieces.Count == 0) && (currentTrashCount > 0)))
+            {
+                foreach (Trash item in _agentManager.trashCans)
+                {
+                    float score = Simulate(item.transform);
+                    if (score > bestScore)
+                    {
+                        bestScore = score;
+                        bestItem = item.transform;
+                    }
+                }
+            }else
             {
                 foreach (Trash item in _agentManager.trashPieces)
                 {
@@ -47,18 +58,7 @@ public class MonteCarloAgent : MonoBehaviour
                     }
                 }
             }
-            else
-            {
-                foreach (Trash item in _agentManager.trashCans)
-                {
-                    float score = Simulate(item.transform);
-                    if (score > bestScore)
-                    {
-                        bestScore = score;
-                        bestItem = item.transform;
-                    }
-                }
-            }
+            
             
             yield return null;
         }

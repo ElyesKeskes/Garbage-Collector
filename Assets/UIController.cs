@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
     public RotateScript[] rotateScripts;
    public AgentManager _agentManager;
-
+    public TextMeshProUGUI PlayerWins;
     public AdHocCharacter _adHocCharacter;
     public MonteCarloAgent _monteCarloAgent;
     public TextMeshProUGUI _agentManagerText, _adHocCharacterText, _monteCarloAgentText;
@@ -33,7 +34,35 @@ public class UIController : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0)) {
             changeCam();
         }
+        if(_agentManager.trashRandomizer.NumberofTrashToSpawn == (_monteCarloAgent.currentTrashCount + _adHocCharacter.currentTrashCount + _agentManager.currentTrashCount))
+        {
+            Compare(_agentManager.currentTrashCount, _adHocCharacter.currentTrashCount, _monteCarloAgent.currentTrashCount);
+        }
+    }
 
+    private void Compare(int a, int b, int c)
+    {
+        PlayerWins.gameObject.SetActive(true);
+        if(a < b) {
+            if (b < c)
+            {
+                PlayerWins.text = " MONTE CARLO WINS!";
+            }
+            else {
+                PlayerWins.text = "ADHOC WINS!";
+            }
+        }
+        else
+        {
+            if (a < c)
+            {
+                PlayerWins.text = " MONTE CARLO WINS!";
+            }
+            else {
+                PlayerWins.text = "A* WINS!";
+            }
+        }
+        Time.timeScale = 0f;
     }
 
     private void changeCam()

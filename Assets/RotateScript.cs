@@ -7,7 +7,8 @@ public class RotateScript : MonoBehaviour
     public GameObject cam;
     private void Update()
     {
-       
+       if(cam != null)
+        {
             Vector3 direction = cam.transform.position - transform.position;
 
             direction.y = 0;
@@ -16,6 +17,8 @@ public class RotateScript : MonoBehaviour
             {
                 transform.rotation = Quaternion.LookRotation(-direction);
             }
+        }
+            
         
     }
 }

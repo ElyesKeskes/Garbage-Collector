@@ -266,7 +266,7 @@ public class AgentManager : MonoBehaviour
     {
         yield return new WaitUntil(() => moveOn);
         moveOn = false;
-        if (currentlyOnTrashcan)
+        if (currentlyOnTrashcan || ((trashPieces.Count == 0) && (currentTrashCount > 0)))
         {
             GetClosestTrashCan();
         }

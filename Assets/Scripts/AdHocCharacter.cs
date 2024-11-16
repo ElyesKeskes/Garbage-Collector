@@ -30,26 +30,7 @@ public class AdHocCharacter : MonoBehaviour
         // Reset target
         targetItem = null;
 
-        if (!currentlyOnTrashcan)
-        {
-            // Find the closest trash piece
-            Transform trashToSelect = null;
-            float closestDistance = float.MaxValue;
-
-            foreach (Trash item in _agentManager.trashPieces)
-            {
-                float distance = Vector3.Distance(transform.position, item.transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    trashToSelect = item.transform;
-                }
-            }
-
-            // Set the target item to the closest trash piece
-            targetItem = trashToSelect;
-        }
-        else
+        if (currentlyOnTrashcan || ((_agentManager.trashPieces.Count == 0) && (currentTrashCount > 0)))
         {
             // Find the closest trash can
             Transform closestTrashCan = null;
@@ -67,6 +48,25 @@ public class AdHocCharacter : MonoBehaviour
 
             // Set the target item to the closest trash can
             targetItem = closestTrashCan;
+        }
+        else
+        {
+            // Find the closest trash piece
+            Transform trashToSelect = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (Trash item in _agentManager.trashPieces)
+            {
+                float distance = Vector3.Distance(transform.position, item.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    trashToSelect = item.transform;
+                }
+            }
+
+            // Set the target item to the closest trash piece
+            targetItem = trashToSelect;
         }
 
         // If we have a valid target, set the destination
