@@ -20,7 +20,7 @@ public class MonteCarloAgent : MonoBehaviour
     public bool moveOn = false;
     public bool gotUp = true;
     public float upPushForce = 1.5f;
-
+    public int TotalTrashCollected = 0;
     void Start()
     {
         StartCoroutine(RunMCTS());
@@ -86,6 +86,7 @@ public class MonteCarloAgent : MonoBehaviour
         {
             _animator.SetTrigger("Throw");
             currentlyOnTrashcan = !currentlyOnTrashcan;
+            TotalTrashCollected += currentTrashCount;
             currentTrashCount = 0;
         }
         else
@@ -97,7 +98,8 @@ public class MonteCarloAgent : MonoBehaviour
         if (currentTrashCount >= _agentManager.trashCapacity)
         {
             currentlyOnTrashcan = !currentlyOnTrashcan;
-            currentTrashCount = 0;
+          
+            //currentTrashCount = 0;
         }
 
         StartCoroutine(OnTrashPickedUpChangeTargetContinuation());

@@ -103,6 +103,7 @@ public class AnimEvents : MonoBehaviour
                 {
                     new_agentManager._animator.SetTrigger("Walk");
                     new_agentManager.GetClosestTrash();
+                    new_agentManager.agentCharacter.Moving = false;
                     new_agentManager.NavigateToTile();
                 }
                 if (_monteCarloAgent.targetItem.transform == new_adHocCharacter.targetItem.transform)
@@ -119,6 +120,7 @@ public class AnimEvents : MonoBehaviour
                     {
                         new_agentManager._animator.SetTrigger("Walk");
                         new_agentManager.GetClosestTrash();
+                        new_agentManager.agentCharacter.Moving = false;
                         new_agentManager.NavigateToTile();
                     }
                     if (_adHocCharacter.targetItem.transform == new_monteCarloAgent.targetItem.transform)

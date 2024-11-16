@@ -17,7 +17,7 @@ public class AgentManager : MonoBehaviour
     public Pathfinder pathfinder;
     Path Lastpath;
     Tile currentTile;
-    private int currentTrashCount = 0;
+    public int currentTrashCount = 0;
     public int trashCapacity = 3;
 
     public Animator _animator;
@@ -53,6 +53,7 @@ public class AgentManager : MonoBehaviour
     public MonteCarloAgent _monteCarloAgent;
 
     public AdHocCharacter _adHocCharacter;
+    public int TotalTrashCollected = 0;
 
     public void RotateTowards(Transform target)
     {
@@ -241,6 +242,9 @@ public class AgentManager : MonoBehaviour
         {
             _animator.SetTrigger("Throw");
             currentlyOnTrashcan = !currentlyOnTrashcan;
+            
+            TotalTrashCollected += currentTrashCount;
+            Debug.Log("TotalTrashCollected " + TotalTrashCollected + " currentTrashCount " + currentTrashCount);
             currentTrashCount = 0;
         }
         else
@@ -252,7 +256,7 @@ public class AgentManager : MonoBehaviour
         if(currentTrashCount >= trashCapacity)
         {
             currentlyOnTrashcan = !currentlyOnTrashcan;
-            currentTrashCount = 0;
+          //  currentTrashCount = 0;
         }
 
         StartCoroutine(SelectNextTarget());

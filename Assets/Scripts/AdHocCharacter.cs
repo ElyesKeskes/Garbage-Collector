@@ -19,7 +19,7 @@ public class AdHocCharacter : MonoBehaviour
     public bool moveOn = false;
     public bool gotUp = true;
     public float upPushForce = 1.5f;
-
+    public int TotalTrashCollected = 0;
     void Start()
     {
         SwitchTarget();
@@ -85,6 +85,7 @@ public class AdHocCharacter : MonoBehaviour
         {
             _animator.SetTrigger("Throw");
             currentlyOnTrashcan = !currentlyOnTrashcan;
+            TotalTrashCollected += currentTrashCount;
             currentTrashCount = 0;
         }
         else
@@ -96,7 +97,7 @@ public class AdHocCharacter : MonoBehaviour
         if (currentTrashCount >= _agentManager.trashCapacity)
         {
             currentlyOnTrashcan = !currentlyOnTrashcan;
-            currentTrashCount = 0;
+           // currentTrashCount = 0;
         }
 
         StartCoroutine(OnTrashPickedUpChangeTargetContinuation());

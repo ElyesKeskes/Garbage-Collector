@@ -195,7 +195,7 @@ public class Trash : MonoBehaviour
         foreach (Transform child in _agentManager.trashBagTransform)
         {
             _agentManager.currentValue++;
-            _agentManager.currentTXT.text = _agentManager.currentValue.ToString();
+           // _agentManager.currentTXT.text = _agentManager.currentValue.ToString();
             StartCoroutine(LerpTrashToTrashCan(child, 0.6f));
         }
         
