@@ -69,9 +69,9 @@ This game serves as both an educational and entertaining showcase of advanced AI
   - 🗑️ Eco-Friendly: Collect all garbage in a single run.
   - 🐕 Dog Whisperer: Complete a level without encountering a dog.
   - 🧠 Algorithm Master: Successfully complete a level using each AI algorithm.
+---
 
-
-### 📧 Contact 
+## 📧 Contact 
 If you have any questions or would like to see the project footage, please don't hesitate to reach out via elyes.keskes@esprit.tn .
 
 ---
