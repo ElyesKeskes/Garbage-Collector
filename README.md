@@ -75,4 +75,4 @@ This game serves as both an educational and entertaining showcase of advanced AI
 If you have any questions or would like to see the project footage, please don't hesitate to reach out via elyes.keskes@esprit.tn .
 
 ---
-Thank you for taking an interest in the VR Chemistry Lab! 🌟
+Thank you for taking an interest in the Garbage Collector! 🌟
